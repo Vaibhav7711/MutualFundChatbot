@@ -1,6 +1,6 @@
 streamlit
 chromadb
-google-genai
+google-genai==1.65.0
 python-dotenv
 numpy
 pandas
