@@ -8,7 +8,7 @@ import json
 from dotenv import load_dotenv
 import chromadb
 from google import genai
-import streamlit as st
+
 
 # ==========================================
 # CONFIG
@@ -16,14 +16,14 @@ import streamlit as st
 
 load_dotenv()
 
-# FIX 3: Works locally (from .env) AND on Streamlit Cloud (from st.secrets)
-GOOGLE_API_KEY = (
-    os.getenv("GOOGLE_API_KEY")
-    or st.secrets.get("GOOGLE_API_KEY", None)
-)
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE_API_KEY not found in env or Streamlit secrets")
+    try:
+        import streamlit as st
+        GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+    except Exception:
+        raise ValueError("GOOGLE_API_KEY not found in env or Streamlit secrets")
 
 client = genai.Client(api_key=GOOGLE_API_KEY)
 
